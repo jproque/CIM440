@@ -11,6 +11,7 @@ var mouthWidth = 60;
 var mouthHeight = 25;
 var goldToothSize = 5;
 
+let value = 0;
 //character center point (x-coordinate): 120
 
 
@@ -20,7 +21,7 @@ function setup() {
   createCanvas(500,500);
   background("teal");
 
-  let value = 0;
+
 }
 
 function draw() {
@@ -113,23 +114,18 @@ function draw() {
 
 
   //interaction
-  fill(value);
   //crown
+  fill(value);
   strokeWeight(0);
   triangle(70,75,70,55,120,75);//crown piece left
   triangle(170,75,170,55,120,75);//crown piece right
   triangle(70,75,120,55,170,75);//crown piece center
 }//end of draw
 
-  function mousePressed() {
-    if (value === 0) {
-      value = "gold";
-    } else {
-      value = 0;
-      }
-  }
-
-
-
-
-//end of draw
+function mousePressed() {
+  if (value === 0) {
+    value = "gold";
+  } else {
+    value = 0;
+    }
+}
