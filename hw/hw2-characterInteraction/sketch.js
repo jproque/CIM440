@@ -11,22 +11,34 @@ var mouthWidth = 60;
 var mouthHeight = 25;
 var goldToothSize = 5;
 
-let value = 0;
+var crownButton;
+var crownColor = "black";
 //character center point (x-coordinate): 120
 
+let slider;
 
 function setup() {
   // put setup code here
-
   createCanvas(500,500);
   background("teal");
 
+  crownButton = createButton("Click to turn Crown gold");
+  crownButton.position(20,20);
+  crownButton.mousePressed(function(){
+  //your action goes here
+  //the button mousepressed function is tied to the general mousepressed function
+  crownColor = "gold";
+  });
+
+
+  slider = createSlider(0,255,127);
+  slider.position(50,450);
 
 }
 
 function draw() {
   //title
-  fill("white");
+  fill("faceColor");
   textSize(30);
   textFont('Calibri');
   text('"Ronald"',300,75,200,200); // Text wraps within text box
@@ -40,6 +52,11 @@ function draw() {
   textSize(30);
   textFont('Calibri');
   text(myName,310,140,200,200); // Text wraps within text box
+
+  fill("white");
+  textSize(15);
+  textFont('Calibri');
+  text("Change shirt color.",50,430,200,200); // Text wraps within text box
 
   //body
   fill("white");
@@ -55,8 +72,12 @@ function draw() {
 
   //clothes
   //shirt
-  fill("orange");
+  //fill("orange");
   strokeWeight(2);
+  colorMode(HSB, 255);
+  // slider has a range between 0 and 255 with a starting value of 127
+  // Set the hue according to the slider
+  fill(slider.value(), 255, 255);
   rect(105,170,30,100);//shirt torso - back
   rect(70,170,100,20);//shirt sleeves
   strokeWeight(0);
@@ -107,25 +128,11 @@ function draw() {
   fill("gold");
   rect(110,135,goldToothSize,goldToothSize);//gold tooth
 
-  //width and height of canvas
-  console.log("width " + width);
-  console.log("height " + height);
-
-
-
   //interaction
   //crown
-  fill(value);
+  fill(crownColor);
   strokeWeight(0);
   triangle(70,75,70,55,120,75);//crown piece left
   triangle(170,75,170,55,120,75);//crown piece right
   triangle(70,75,120,55,170,75);//crown piece center
 }//end of draw
-
-function mousePressed() {
-  if (value === 0) {
-    value = "gold";
-  } else {
-    value = 0;
-    }
-}
