@@ -34,6 +34,10 @@ function mousePressed(){
     if(mouseX > hitX[0] && mouseX < hitX[0] + hitSize && mouseY > hitY[0] && mouseY < hitY[0] + hitSize){
       console.log("Clicked Button 0");
       currentImage = currentImage + 1;
+      if(currentImage == 3){
+        currentImage = 0;
+
+      }//check length
 
     }//end of hit[0] click
 
