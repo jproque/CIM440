@@ -2,9 +2,9 @@
 // Puppy image "puppies" by www.petian.net is licensed under CC BY-NC-ND 2.0  https://search.creativecommons.org/photos/4f271583-e45d-4faf-bfc8-7291c7c1e3c3
 // dinosaur "Rupenhorn Dinosaur #4" by Kristian_Laban is licensed under CC BY-NC 2.0 https://search.creativecommons.org/photos/96213ba5-e9b6-4f2f-91e4-da28b9fcad22
 
-var sloth, puppy, dinosaur, newyorkcity, beach, car;
+var sloth, puppy, dinosaur;
 
-var sButton, pButton, dButton, nButton, bButton, cButton;
+var sButton, pButton, dButton;
 
 var currentImage = 0;
 
@@ -14,9 +14,6 @@ function preload(){
   sloth = loadImage("images/sloth.jpg");
   puppy = loadImage("images/puppy.jpg");
   dinosaur = loadImage("images/dinosaur.jpg");
-  newyorkcity = loadImage("images/newyorkcity.jpg");
-  beach = loadImage("images/beach.jpg");
-  car = loadImage("images/car.jpg");
 }
 
 function setup() {
@@ -43,28 +40,6 @@ function setup() {
 
  });
 
- nButton = createButton("New York City");
- nButton.mousePressed(function(){
-
-     currentImage = 3;
-
- });
-
- bButton = createButton("Beach");
- bButton.mousePressed(function(){
-
-     currentImage = 4;
-
- });
-
- cButton = createButton("Car");
- cButton.mousePressed(function(){
-
-     currentImage = 5;
-
- });
-
-
  curImage = sloth;
 }
 
@@ -82,12 +57,6 @@ function draw() {
     curImage = puppy;
   }else if(currentImage == 2){
     curImage = dinosaur;
-  }else if(currentImage == 3){
-    curImage = newyorkcity;
-  }else if(currentImage == 4){
-    curImage = beach;
-  }else if(currentImage == 5){
-    curImage = car;
   }
 
   //image(curImage,0,0,curImage.width/4,curImage.height/4);
