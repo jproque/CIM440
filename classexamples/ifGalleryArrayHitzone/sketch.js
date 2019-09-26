@@ -33,6 +33,7 @@ function draw() {
 function mousePressed(){
     if(mouseX > hitX[0] && mouseX < hitX[0] + hitSize && mouseY > hitY[0] && mouseY < hitY[0] + hitSize){
       console.log("Clicked Button 0");
+      currentImage = currentImage + 1;
 
     }//end of hit[0] click
 
