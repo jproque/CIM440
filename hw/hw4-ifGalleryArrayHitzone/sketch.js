@@ -15,6 +15,9 @@ function preload(){
   imageArray[0] = loadImage("images/sloth.jpg");
   imageArray[1] = loadImage("images/puppy.jpg");
   imageArray[2] = loadImage("images/dinosaur.jpg");
+  imageArray[3] = loadImage("images/newyorkcity.jpg");
+  imageArray[4] = loadImage("images/beach.jpg");
+  imageArray[5] = loadImage("images/car.jpg");
 }//end of preload
 
 function setup() {
@@ -34,7 +37,7 @@ function mousePressed(){
     if(mouseX > hitX[0] && mouseX < hitX[0] + hitSize && mouseY > hitY[0] && mouseY < hitY[0] + hitSize){
       console.log("Clicked Button 0");
       currentImage = currentImage + 1;
-      if(currentImage == 3){
+      if(currentImage == 6){
         currentImage = 0;
 
       }//check length
