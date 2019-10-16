@@ -15,7 +15,6 @@ var offset = 0;
 var ballAim = 0;
 
 var score = 1;
-var pointScored = false;
 
 function preload(){
   ballImage = loadImage("basketball.png");
