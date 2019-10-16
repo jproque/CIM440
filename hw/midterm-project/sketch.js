@@ -15,6 +15,7 @@ var offset = 0;
 var ballAim = 0;
 
 var score = 1;
+var pointScored = false;
 
 function preload(){
   ballImage = loadImage("basketball.png");
@@ -59,9 +60,17 @@ function draw() {
   // hoop hitzone
   if(ballX > hitX && ballX < hitX+hitW && ballY > hoopHeight && ballY < hoopHeight+hitH){
     console.log("In basket");
-    score = score + 1;
+    pointScored = true;
+
   }
   // end of hoop hitzone
+  if(pointScored == true){
+    score = score + 1;
+  }
+
+  if(score == score + 1){
+    pointScored = false;
+  }
 
   //scoreboard
   fill(0);
