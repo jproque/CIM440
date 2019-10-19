@@ -71,7 +71,6 @@ function draw() {
       scoreOnce = true;
       score++;
     }
-
   } // end of hoop hitzone
 
   //scoreboard
@@ -83,7 +82,6 @@ function draw() {
   let scoreboard = 'YOUR SCORE';
   text(scoreboard,500,50);
   textSize(60);
-  // let score = 1;
   text(score,550,120);
   // end of scoreboard
 
@@ -94,6 +92,12 @@ function draw() {
 
   // basketball playerImage
   image(playerImage, 0, 195, 50, 150);
+
+  // game title
+  stroke('orange');
+  fill('orange');
+  textSize(47);
+  text('T H E  3 - P T  C H A L L E N G E',0,395);
 
   // ball movement
   if(ballMove == true){
@@ -108,8 +112,7 @@ function draw() {
     console.log("BallY " + ballY);
     console.log("BallX " + ballX);
 
-  }
-  // end of ballMove true
+  } // end of ballMove true
 
   // ball stop moving
   if(ballX > width-530){
@@ -122,10 +125,7 @@ function draw() {
 
   if(ballY < 0){
     ballMove = false;
-  }
-  // end of ballMove false
-
-
+  } // end of ballMove false
 
 } // end of draw
 
@@ -137,7 +137,6 @@ function keyPressed(){
   // SPACE BAR
   if (keyCode == 32) {
     ballMove = true;
-
   } // end of space bar
 
   // 'R' RESET
