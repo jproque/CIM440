@@ -1,21 +1,26 @@
+// ball position variables
 var ballX = 0;
 var ballY = 0;
 var ballImage;
+var ballMove = false;
+
+// hoop variables
 var hoopHeight = 0;
 var hoopImage;
 var playerImage;
-var ballMove = false;
 
+// hitzone variables
 var hitX = 345;
 var hitW = 60;
 var hitH = 120;
 
+// ball aim variables
 var offset = 0;
-
 var ballAim = 0;
 
-var score = 1;
-var pointScored = false;
+// scoring variables
+var score = 0;
+var scoreOnce = false;
 
 function preload(){
   ballImage = loadImage("basketball.png");
@@ -60,17 +65,14 @@ function draw() {
   // hoop hitzone
   if(ballX > hitX && ballX < hitX+hitW && ballY > hoopHeight && ballY < hoopHeight+hitH){
     console.log("In basket");
-    pointScored = true;
 
-  }
-  // end of hoop hitzone
-  if(pointScored == true){
-    score = score + 1;
-  }
+    // scoring true false statement
+    if(scoreOnce == false){
+      scoreOnce = true;
+      score++;
+    }
 
-  if(score == score + 1){
-    pointScored = false;
-  }
+  } // end of hoop hitzone
 
   //scoreboard
   fill(0);
@@ -123,6 +125,8 @@ function draw() {
   }
   // end of ballMove false
 
+
+
 } // end of draw
 
 function keyPressed(){
@@ -144,6 +148,7 @@ function keyPressed(){
     offset = 0;
     ballAim = height/2;
     hoopHeight = random(0, 280);
+    scoreOnce = false;
   } // end of 'r'
 
   // UP ARROW
