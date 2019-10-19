@@ -21,8 +21,20 @@ var ballAim = 0;
 // scoring variables
 var score = 0;
 var scoreOnce = false;
+var scoreX = 0;
+var scoreY = 0;
+var scoreText = 0;
+
+// background variable
+var backgroundImage;
+
+// fireworks variables
+var fireworks = [];
+var gravity;
 
 function preload(){
+  backgroundImage = loadImage("arena.jpg");
+
   ballImage = loadImage("basketball.png");
 
   hoopImage = loadImage("basketball-hoop-1.png");
@@ -30,6 +42,54 @@ function preload(){
   playerImage = loadImage("basketball-player.png");
 
 }; // end of preLoad
+
+function Firework() {
+  this.hu = random(255);
+  this.firework = new Particle(random(width), height, this.hu, true);
+  this.exploded = false;
+  this.particles = [];
+
+
+  this.done = function() {
+    if (this.exploded && this.particles.length === 0){
+  return true;
+  }else {
+    return false;
+  }
+  }
+  this.update = function() { //firstUpdate
+    if (!this.exploded) {
+      this.firework.applyForce(gravity);
+      this.firework.update();
+      if (this.firework.vel.y >= 0) {
+        this.exploded = true;
+        this.explode();
+      }
+    }
+ for (var i = this.particles.length-1; i >= 0; i--) {
+      this.particles[i].applyForce(gravity);
+      this.particles[i].update();
+   if (this.particles[i].done()){
+     this.particles.splice(i, 1);
+   }
+    }
+  }
+
+  this.explode = function() {
+    for (var i = 0; i < 100; i++) {
+      var p = new Particle(this.firework.pos.x, this.firework.pos.y, this.hu, false);
+      this.particles.push(p);
+    }
+  }
+  this.show = function() {
+    if (!this.exploded) {
+      this.firework.show();
+    }
+    for (var i = this.particles.length-1; i >= 0; i--) {
+      this.particles[i].show();
+    }
+  }
+} // end of Firework function
 
 function setup() {
   createCanvas(900,400);
@@ -39,10 +99,21 @@ function setup() {
 
     ballAim = height/2;
 
+    scoreX = 550;
+    scoreY = 120;
+    scoreText = 60;
+
+    // firework setup
+    gravity = createVector(0, 0.2);
+    colorMode(HSB);
+    // stroke(255);
+    // strokeWeight(4);
+    // end of firework setup
+
 } // end of setup
 
 function draw() {
-  background(255);
+  background(0);
 
   // instructions
   fill(255);
@@ -54,8 +125,8 @@ function draw() {
   let arrows = 'Press UP & DOWN ARROWS to aim the ball.';
   let reset = 'Press R to reset the ball after the shot.';
   fill(0);
-  text(arrows, 450, 275);
-  text(spacebar, 450, 225);
+  text(spacebar, 450, 275);
+  text(arrows, 450, 225);
   text(reset, 450, 325);
   // end of instructions
 
@@ -65,7 +136,6 @@ function draw() {
   // hoop hitzone
   if(ballX > hitX && ballX < hitX+hitW && ballY > hoopHeight && ballY < hoopHeight+hitH){
     console.log("In basket");
-
     // scoring true false statement
     if(scoreOnce == false){
       scoreOnce = true;
@@ -78,15 +148,15 @@ function draw() {
   rect(435, 25, 275, 140);
   fill(255);
   textSize(20);
-  stroke(255);
   let scoreboard = 'YOUR SCORE';
   text(scoreboard,500,50);
-  textSize(60);
-  text(score,550,120);
+  textSize(scoreText);
+  text(score,scoreX,scoreY);
   // end of scoreboard
 
   // basketball & aiming line
-  stroke(0);
+  stroke(255);
+  fill(255);
   line(30, height/2 , 80, ballAim);
   image(ballImage, ballX+20, ballY, 20, 20);
 
@@ -97,7 +167,7 @@ function draw() {
   stroke('orange');
   fill('orange');
   textSize(47);
-  text('T H E  3 - P T  C H A L L E N G E',0,395);
+  text('T H E  3 - P T  C H A L L E N G E',5,395);
 
   // ball movement
   if(ballMove == true){
@@ -126,6 +196,22 @@ function draw() {
   if(ballY < 0){
     ballMove = false;
   } // end of ballMove false
+
+  // end of game sequence
+  if(score == 10){
+    // fireworks
+    colorMode(RGB);
+    if (random(1) < 0.03) {
+      fireworks.push(new Firework());
+    }
+
+    for (var i = fireworks.length-1; i >= 0; i--) {
+      fireworks[i].update();
+      fireworks[i].show();
+      if (fireworks[i].done())
+        fireworks.splice(i, 1);
+    } // end of fireworks
+  } // end of score == 10
 
 } // end of draw
 
@@ -168,3 +254,53 @@ function keyPressed(){
   } // end of down arrow
 
 }; // end of keyPressed
+
+// fireworks
+function Particle(x, y, hu, firework) {
+    this.pos = createVector(x, y);
+    this.firework = firework;
+    this.lifespan = 255;
+    this.hu = hu;
+
+  if (this.firework){
+   this.vel = createVector(0, random(-12, -8));
+ }else {
+   this.vel = p5.Vector.random2D();
+   this.vel.mult(random(2, 10));
+ }
+
+  this.acc = createVector(0, 0);
+
+  this.applyForce = function(force) {
+    this.acc.add(force);
+  }
+
+  this.update = function() { //second update
+    if (!this.firework) {
+      this.vel.mult(0.9);
+      this.lifespan -= 4;
+    }
+    this.vel.add(this.acc);
+    this.pos.add(this.vel);
+    this.acc.mult(0);
+  }
+  this.done = function(){
+    if(this.lifespan < 0){
+      return true;
+    }else {
+      return false;
+    }
+  }
+  this.show = function() {
+   colorMode(HSB);
+    if (!this.firework) {
+     // strokeWeight(2);
+     stroke(hu, 255, 255, this.lifespan);
+   }else {
+     // strokeWeight(4);
+     stroke(hu, 255, 255);
+   }
+    point(this.pos.x, this.pos.y);
+
+  }
+}; // end of Particle
