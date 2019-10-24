@@ -1,4 +1,4 @@
-# The 3-Point Challenge
+Hello!
 
 Welcome to The 3-Point Challenge Game!
 
@@ -11,4 +11,4 @@ Directions:
 
 3 - Once the ball has stopped moving, press the 'R' key to reset the ball in the player's hands so you can shoot again.
 
-4 - Once you score 10 points, then game will end. You must press CRTL + R to restart the game.
+4 - Once you score 10 points, then game will end. You must press CRTL + R to restart the game. 
