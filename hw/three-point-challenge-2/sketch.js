@@ -33,7 +33,7 @@ var fireworks = [];
 var gravity;
 
 // popup variables
-var popup = "YOU WIN!";
+var popup;
 
 function preload(){
   backgroundImage = loadImage("arena.jpg");
@@ -109,9 +109,9 @@ function setup() {
     // firework setup
     gravity = createVector(0, 0.2);
     colorMode(HSB);
-    // stroke(255);
-    // strokeWeight(4);
     // end of firework setup
+
+
 
 } // end of setup
 
@@ -200,8 +200,15 @@ function draw() {
     ballMove = false;
   } // end of ballMove false
 
+  // popup box
+  stroke("black");
+  fill(255);
+  popupBox = rect(width/2-200, height/2-100, 300, 200);
+  fill(0);
+  popup = text("YOU WIN!", width/2-160, height/2-20);
+
   // end of game sequence
-  if(score == 10){
+  if(score == 2){
     // fireworks
     colorMode(RGB);
     if (random(1) < 0.03) {
@@ -214,12 +221,13 @@ function draw() {
       if (fireworks[i].done())
         fireworks.splice(i, 1);
     } // end of fireworks
+
+    popup = true;
+    popupBox = true;
   } // end of score == 10
 
 
-  fill(255);
-  rect(width/2, height/2, 300, 200);
-  text("popup", width/2, height/2);
+
 
 } // end of draw
 
