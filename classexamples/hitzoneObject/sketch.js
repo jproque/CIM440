@@ -1,12 +1,22 @@
 var button1;
 var button2;
 
+var soundFile;
+var cowVid;
+
+function preload() {
+  soundFile = loadSound("assets/CowMoo.mp3");
+  cowVid = createVideo("assets/cow.mp4");
+}
+
 function setup() {
-createCanvas(400,400);
+  createCanvas(400,400);
 
-button1 = new hitzoneObject(100, 200, 50, "red", "Stop", loadImage("assets/stop.png"));
+  button1 = new hitzoneObject(100, 200, 50, "red", "Stop", loadImage("assets/stop.png"));
 
-button2 = new hitzoneObject(200, 200, 50, "green", "Play", loadImage("assets/play.png"));
+  button2 = new hitzoneObject(200, 200, 50, "green", "Play", loadImage("assets/play.png"));
+
+    cowVid.hide();
 
 } // end of setup
 
@@ -20,6 +30,23 @@ function draw() {
   button2.check();
 
 } // end of draw
+
+function mousePressed() {
+  if(button1.overlay == true){
+    console.log(button1.label);
+    soundFile.stop();
+    cowVid.stop();
+    cowVid.hide();
+  }
+
+  if(button2.overlay == true){
+    console.log(button2.label);
+    soundFile.stop();
+    soundFile.play();
+    cowVid.show();
+    cowVid.play();
+  }
+}
 
 class hitzoneObject{
 
