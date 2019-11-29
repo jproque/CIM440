@@ -69,7 +69,7 @@ function draw() {
     console.log("fall");
 
     for(var f = 0; f < snowAmount; f++){
-      if(leafY[f] < height - 20){
+      if(leafY[f] < height-300){
         leafY[f]++;
         leafX[f] = leafX[f] + sin(radians(frameCount));
       };
