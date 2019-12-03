@@ -8,7 +8,13 @@ var MIN_OPENING = 300;
 var dog;
 var hydrants;
 var gameOver;
-var dogImg, hydrantImg, bgImg;
+var hydrantImg, bgImg;
+
+//ground variables
+// var ground;
+// var street, street2;
+var wallBottom;
+
 
 //scoreboard variables
 var interval = 1000;
@@ -16,10 +22,14 @@ var prevMillis = 0;
 var counter = 0;
 
 function preload() {
-  dogImg = loadImage('assets/corgi-still.png');
   bgImg = loadImage('assets/dog-bg.png');
 
   dogRun = loadAnimation('assets/corgi-run-ext.png', 'assets/corgi-run-close.png');
+
+  // street = loadImage('assets/street.png');
+  // street2 = loadImage('assets/street-2.png');
+  // road = loadAnimation('assets/street.png', 'assets/street-2.png');
+
 } // end of preload
 
 function setup() {
@@ -28,7 +38,7 @@ function setup() {
   hydrantImg = loadImage('assets/hydrant.png');
 
   dog = createSprite(width/2, 520, 100, 100);
-  dog.addAnimation('floating', dogRun);
+  dog.addAnimation('normal', dogRun);
   dog.rotateToDirection = true;
   dog.velocity.x = 4;
   dog.setCollider('circle', 0, 0, 75);
@@ -37,6 +47,16 @@ function setup() {
   hydrants = new Group();
   gameOver = true;
   updateSprites(false);
+
+  // ground = createSprite(0,600, windowWidth, 100);
+  // ground.addAnimation('normal', road);
+  // ground.debug = true;
+
+  wallBottom = createSprite(width/2, height+30/2, width, 30);
+  wallBottom.immovable = true;
+  wallBottom.setCollider('rectangle', 0, 0, windowWidth, 600);
+  wallBottom.debug = true;
+
 
   camera.position.y = height/2;
 } // end of setup
@@ -101,7 +121,11 @@ function draw() {
   text(scoreboard,width-200,50);
   // end of scoreboard
 
+  drawSprite(wallBottom);
+
   camera.on(); // when camera is on, objects will move
+
+  dog.collide(wallBottom);
 
   drawSprites(hydrants);
   drawSprite(dog);
