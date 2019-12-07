@@ -2,7 +2,8 @@
 //mouse click or x to flap
 
 var GRAVITY = 0.3;
-var FLAP = -7;
+var MAX_VELOCITY = 4;
+var FLAP = -10;
 var GROUND_Y = 450;
 var MIN_OPENING = 300;
 var dog;
@@ -11,8 +12,7 @@ var gameOver;
 var hydrantImg, bgImg;
 
 //ground variables
-// var ground;
-// var street, street2;
+var street, street2;
 var wallBottom;
 
 
@@ -26,21 +26,19 @@ function preload() {
 
   dogRun = loadAnimation('assets/corgi-run-ext.png', 'assets/corgi-run-close.png');
 
-  // street = loadImage('assets/street.png');
-  // street2 = loadImage('assets/street-2.png');
-  // road = loadAnimation('assets/street.png', 'assets/street-2.png');
+  street = loadImage('assets/street.png');
+  street2 = loadImage('assets/street-2.png');
+  road = loadAnimation('assets/street.png', 'assets/street-2.png');
 
 } // end of preload
 
 function setup() {
-  createCanvas(windowWidth, 600);
+  createCanvas(windowWidth, 800);
 
   hydrantImg = loadImage('assets/hydrant.png');
 
   dog = createSprite(width/2, 520, 100, 100);
   dog.addAnimation('normal', dogRun);
-  dog.rotateToDirection = true;
-  dog.velocity.x = 4;
   dog.setCollider('circle', 0, 0, 75);
   dog.debug = true;
 
@@ -48,17 +46,12 @@ function setup() {
   gameOver = true;
   updateSprites(false);
 
-  // ground = createSprite(0,600, windowWidth, 100);
-  // ground.addAnimation('normal', road);
-  // ground.debug = true;
-
-  wallBottom = createSprite(width/2, height+30/2, width, 30);
+  wallBottom = createSprite(width/2, height-30, width, 0);
+  wallBottom.addAnimation('normal', road);
   wallBottom.immovable = true;
-  wallBottom.setCollider('rectangle', 0, 0, windowWidth, 600);
+  wallBottom.setCollider('rectangle', 0, 0, width, 350);
   wallBottom.debug = true;
 
-
-  camera.position.y = height/2;
 } // end of setup
 
 function draw() {
@@ -66,20 +59,26 @@ function draw() {
   if(gameOver && keyWentDown('x'))
     newGame();
 
+    console.log("game over: " + gameOver);
+
   // when game is NOT over
   if(!gameOver) {
-
+    if(dog.collide(wallBottom)){
+      dog.velocity.y = 0;
+    }
     // scoreboard counter
     if(millis() - prevMillis > interval){
       prevMillis = millis();
       counter = counter + 1;
-      console.log(counter);
     } // end of scoreboard counter
+
+    if(dog.position.y != wallBottom.position.y){
+      dog.velocity.y += GRAVITY;
+    }
 
     if(keyWentDown('x'))
       dog.velocity.y = FLAP;
 
-    dog.velocity.y += GRAVITY;
 
     if(dog.position.y<0)
       dog.position.y = 0;
@@ -90,13 +89,14 @@ function draw() {
     if(dog.overlap(hydrants))
       die();
 
-    //spawn pipes
+    //spawn hydrants
     if(frameCount%300 == 0) {
-      var hydrantSpawn = random(000,1000);
+      var hydrantSpawn = random(1000,3000);
       var hydrant = createSprite(dog.position.x + width + hydrantSpawn, 540, 80);
-      console.log(hydrant.position.x);
+      console.log("hydrant spawn: " + hydrant.position.x);
       hydrant.addImage(hydrantImg);
       hydrants.add(hydrant);
+      hydrant.velocity.x = -10;
     }
 
     //get rid of passed pipes
@@ -114,7 +114,6 @@ function draw() {
   //scoreboard
   fill(0,0,0,80);
   stroke(0,0,0,0);
-  // rect(width-220, 20, 150, 45);
   fill(255);
   textSize(20);
   let scoreboard = 'Score:  ' + counter;
@@ -125,8 +124,6 @@ function draw() {
 
   camera.on(); // when camera is on, objects will move
 
-  dog.collide(wallBottom);
-
   drawSprites(hydrants);
   drawSprite(dog);
 
@@ -135,23 +132,22 @@ function draw() {
 function die() {
   updateSprites(false);
   gameOver = true;
-
-  counter = 0;
+  counter = counter + 0;
 } // end of die
 
 function newGame() {
   hydrants.removeSprites();
   gameOver = false;
+  counter = -1;
   updateSprites(true);
   dog.position.x = width/2;
   dog.position.y = height/2;
   dog.velocity.y = 0;
 
-} // end of die
+} // end of newGame
 
 function mousePressed() {
   if(gameOver)
     newGame();
-  dog.velocity.y = FLAP;
-  // dog.position.y = 475;
+    dog.velocity.y = FLAP;
 } //end of mousePressed
