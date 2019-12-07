@@ -7,59 +7,73 @@ var FLAP = -10;
 var GROUND_Y = 450;
 var MIN_OPENING = 300;
 var dog;
-var hydrants;
+var hydrants, hydrantImg;
 var gameOver;
-var hydrantImg, bgImg;
+var bgImg;
 
-//ground variables
+// ground variables
 var street, street2;
 var wallBottom;
 
-
-//scoreboard variables
+// scoreboard variables
 var interval = 1000;
 var prevMillis = 0;
 var counter = 0;
 
+// welcome and game over signs variables
+var welcomeTitle = true;
+var gameOverSign = false;
+
+var show;
+var hide;
+
 function preload() {
+  // city skyline background image
   bgImg = loadImage('assets/dog-bg.png');
 
+  // corgi running
   dogRun = loadAnimation('assets/corgi-run-ext.png', 'assets/corgi-run-close.png');
 
+  // street
   street = loadImage('assets/street.png');
   street2 = loadImage('assets/street-2.png');
   road = loadAnimation('assets/street.png', 'assets/street-2.png');
+
+  // fonts
+  lobster = loadFont('assets/Lobster-Regular.ttf');
+  ralewayScore = loadFont('assets/raleway-font/Raleway-ExtraBold.ttf');
+  ralewayWelcome = loadFont('assets/raleway-font/Raleway-LightItalic.ttf');
 
 } // end of preload
 
 function setup() {
   createCanvas(windowWidth, 800);
 
-  hydrantImg = loadImage('assets/hydrant.png');
-
+  // dog setup
   dog = createSprite(width/2, 520, 100, 100);
   dog.addAnimation('normal', dogRun);
   dog.setCollider('circle', 0, 0, 75);
-  dog.debug = true;
 
+  // hydrant setup
+  hydrantImg = loadImage('assets/hydrant.png');
   hydrants = new Group();
   gameOver = true;
   updateSprites(false);
+  noLoop();
 
+  // floor setup
   wallBottom = createSprite(width/2, height-30, width, 0);
   wallBottom.addAnimation('normal', road);
   wallBottom.immovable = true;
   wallBottom.setCollider('rectangle', 0, 0, width, 350);
-  wallBottom.debug = true;
 
 } // end of setup
 
 function draw() {
+  console.log("game over: " + gameOver);
 
   if(gameOver && keyWentDown('x'))
     newGame();
-
-    console.log("game over: " + gameOver);
 
   // when game is NOT over
   if(!gameOver) {
@@ -108,10 +122,12 @@ function draw() {
   camera.position.x = dog.position.x + width/4;
 
   background("teal");
+  fill("white");
   camera.off(); // when camera is off, objects won't move
   image(bgImg, 0, 0, width, height);
 
   //scoreboard
+  textFont(ralewayScore);
   fill(0,0,0,80);
   stroke(0,0,0,0);
   fill(255);
@@ -119,6 +135,46 @@ function draw() {
   let scoreboard = 'Score:  ' + counter;
   text(scoreboard,width-200,50);
   // end of scoreboard
+
+  if(welcomeTitle == true){
+  // game title
+  textFont(lobster);
+  textSize(100);
+  textStyle(BOLD);
+  stroke('rgba(0,0,0,0.50)');
+  strokeWeight(10);
+  let welcome = "Corgi in the City";
+  text(welcome,windowWidth/2-300,200);
+
+  // tap screen to start
+  textFont(ralewayWelcome);
+  textSize(40);
+  stroke(0);
+  strokeWeight(0);
+  let tapStart = "Tap to start";
+  welcome = text(tapStart,windowWidth/2-100,270);
+}
+
+if(gameOverSign == true){
+// game title
+textFont(lobster);
+textSize(100);
+textStyle(BOLD);
+stroke('rgba(255,0,0,0.50)');
+fill(255,0,0);
+strokeWeight(10);
+let gameover = "Game Over";
+text(gameover,windowWidth/2-210,200);
+
+// tap screen to start
+textFont(ralewayWelcome);
+textSize(40);
+fill(255);
+stroke(0);
+strokeWeight(0);
+let tapRestart = "Tap to restart";
+welcome = text(tapRestart,windowWidth/2-100,270);
+}
 
   drawSprite(wallBottom);
 
@@ -133,12 +189,15 @@ function die() {
   updateSprites(false);
   gameOver = true;
   counter = counter + 0;
+  gameOverSign = true;
+  noLoop();
 } // end of die
 
 function newGame() {
   hydrants.removeSprites();
   gameOver = false;
   counter = -1;
+  loop();
   updateSprites(true);
   dog.position.x = width/2;
   dog.position.y = height/2;
@@ -149,5 +208,7 @@ function newGame() {
 function mousePressed() {
   if(gameOver)
     newGame();
+    welcomeTitle = false;
+    gameOverSign = false;
     dog.velocity.y = FLAP;
 } //end of mousePressed

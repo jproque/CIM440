@@ -9,15 +9,15 @@ function preload(){
 
   puppies = loadImage("puppies.jpg");
 
-  show = createButton("Show Puppy");
-  show.mousePressed(function(){
-    showOrHide = true;
-  });
-
-  hide = createButton("Hide Puppy");
-  hide.mousePressed(function(){
-    showOrHide = false;
-  });
+  // show = createButton("Show Puppy");
+  // show.mousePressed(function(){
+  //   showOrHide = true;
+  // });
+  //
+  // // hide = createButton("Hide Puppy");
+  // hide.mousePressed(function(){
+  //   showOrHide = false;
+  // });
 
 }
 
@@ -33,4 +33,8 @@ function draw() {
   }
 
 
+}
+
+function mousePressed(){
+  showOrHide = true;
 }
