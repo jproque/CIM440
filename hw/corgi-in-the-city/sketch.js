@@ -234,6 +234,7 @@ if(gameOverCounter > 2.5 && gameOverCounter < 3.5 && lifeLeft == true){
 if(gameOverCounter > 3){
   gameOverSign == true
   gameOverCounter = 0;
+  counter = -1;
 
   // game title
   textFont(lobster);
@@ -278,7 +279,6 @@ if(gameOverCounter < 1){
 function die() {
   updateSprites(false);
   gameOver = true;
-  counter = counter + 0;
   gameOverSign = true;
   gameOverCounter = gameOverCounter +1;
   lifeLeft = true;
@@ -288,7 +288,7 @@ function die() {
 function newGame() {
   hydrants.removeSprites();
   gameOver = false;
-  counter = -1;
+  // counter = -1;
   lifeLeft = false;
   loop();
   updateSprites(true);
