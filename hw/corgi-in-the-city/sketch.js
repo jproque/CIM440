@@ -11,7 +11,7 @@ var hydrants, hydrantImg;
 var gameOver;
 var bgImg;
 
-// ground variables
+// floor variables
 var street, street2;
 var wallBottom;
 
@@ -19,13 +19,17 @@ var wallBottom;
 var interval = 1000;
 var prevMillis = 0;
 var counter = 0;
+var gameOverCounter = 0;
 
 // welcome and game over signs variables
 var welcomeTitle = true;
 var gameOverSign = false;
 
-var show;
-var hide;
+// corgi life variables
+var lifeLeft = false;
+var lifeOne = true;
+var lifeTwo = true;
+var lifeThree = true;
 
 function preload() {
   // city skyline background image
@@ -43,6 +47,12 @@ function preload() {
   lobster = loadFont('assets/Lobster-Regular.ttf');
   ralewayScore = loadFont('assets/raleway-font/Raleway-ExtraBold.ttf');
   ralewayWelcome = loadFont('assets/raleway-font/Raleway-LightItalic.ttf');
+  ralewayLostLife = loadFont('assets/raleway-font/Raleway-Regular.ttf');
+
+  // corgi life
+  corgiLifeOne = loadImage('assets/corgi-life.png');
+  corgiLifeTwo = loadImage('assets/corgi-life.png');
+  corgiLifeThree = loadImage('assets/corgi-life.png');
 
 } // end of preload
 
@@ -72,11 +82,15 @@ function setup() {
 function draw() {
   console.log("game over: " + gameOver);
 
-  if(gameOver && keyWentDown('x'))
+  if(gameOver && keyWentDown('x')){
     newGame();
+  }
+  console.log("game over counter: " + gameOverCounter);
+
 
   // when game is NOT over
   if(!gameOver) {
+
     if(dog.collide(wallBottom)){
       dog.velocity.y = 0;
     }
@@ -155,25 +169,101 @@ function draw() {
   welcome = text(tapStart,windowWidth/2-100,270);
 }
 
-if(gameOverSign == true){
-// game title
-textFont(lobster);
-textSize(100);
-textStyle(BOLD);
-stroke('rgba(255,0,0,0.50)');
-fill(255,0,0);
-strokeWeight(10);
-let gameover = "Game Over";
-text(gameover,windowWidth/2-210,200);
+if(gameOverCounter < 1.5 && lifeLeft == true){
+  // game title
+  textFont(ralewayLostLife);
+  textSize(60);
+  textStyle(BOLD);
+  stroke('rgba(255,0,0,0.50)');
+  strokeWeight(5);
+  fill(255,0,0);
+  let welcome = "2 Lives Remaining";
+  text(welcome,windowWidth/2-200,200);
 
-// tap screen to start
-textFont(ralewayWelcome);
-textSize(40);
-fill(255);
-stroke(0);
-strokeWeight(0);
-let tapRestart = "Tap to restart";
-welcome = text(tapRestart,windowWidth/2-100,270);
+  // tap screen to start
+  textFont(ralewayWelcome);
+  textSize(40);
+  fill(255);
+  stroke(0);
+  strokeWeight(0);
+  let tapContinue = "Tap to continue";
+  welcome = text(tapContinue,windowWidth/2-100,270);
+}
+
+if(1.5 < gameOverCounter && gameOverCounter < 2.5 && lifeLeft == true){
+  // game title
+  textFont(ralewayLostLife);
+  textSize(60);
+  textStyle(BOLD);
+  stroke('rgba(255,0,0,0.50)');
+  strokeWeight(5);
+  fill(255,0,0);
+  let welcome = "1 Life Remaining";
+  text(welcome,windowWidth/2-200,200);
+
+  // tap screen to start
+  textFont(ralewayWelcome);
+  textSize(40);
+  fill(255);
+  stroke(0);
+  strokeWeight(0);
+  let tapContinue = "Tap to continue";
+  welcome = text(tapContinue,windowWidth/2-100,270);
+}
+
+if(gameOverCounter > 2.5 && gameOverCounter < 3.5 && lifeLeft == true){
+  // game title
+  textFont(ralewayLostLife);
+  textSize(60);
+  textStyle(BOLD);
+  stroke('rgba(255,0,0,0.50)');
+  strokeWeight(5);
+  fill(255,0,0);
+  let welcome = "0 Lives Remaining";
+  text(welcome,windowWidth/2-200,200);
+
+  // tap screen to start
+  textFont(ralewayWelcome);
+  textSize(40);
+  stroke(0);
+  strokeWeight(0);
+  let tapContinue = "Tap to continue";
+  welcome = text(tapContinue,windowWidth/2-100,270);
+}
+
+if(gameOverCounter > 3){
+  gameOverSign == true
+  gameOverCounter = 0;
+
+  // game title
+  textFont(lobster);
+  textSize(100);
+  textStyle(BOLD);
+  stroke('rgba(255,0,0,0.50)');
+  fill(255,0,0);
+  strokeWeight(10);
+  let gameover = "Game Over";
+  text(gameover,windowWidth/2-210,200);
+
+  // tap screen to start
+  textFont(ralewayWelcome);
+  textSize(40);
+  fill(255);
+  stroke(0);
+  strokeWeight(0);
+  let tapRestart = "Tap to restart";
+  welcome = text(tapRestart,windowWidth/2-100,270);
+}
+
+if(gameOverCounter < 3){
+  image(corgiLifeOne, 40, 30);
+}
+
+if(gameOverCounter < 2){
+  image(corgiLifeTwo, 110, 30);
+}
+if(gameOverCounter < 1){
+  image(corgiLifeThree, 180, 30);
 }
 
   drawSprite(wallBottom);
@@ -190,6 +280,8 @@ function die() {
   gameOver = true;
   counter = counter + 0;
   gameOverSign = true;
+  gameOverCounter = gameOverCounter +1;
+  lifeLeft = true;
   noLoop();
 } // end of die
 
@@ -197,6 +289,7 @@ function newGame() {
   hydrants.removeSprites();
   gameOver = false;
   counter = -1;
+  lifeLeft = false;
   loop();
   updateSprites(true);
   dog.position.x = width/2;
